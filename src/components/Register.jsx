@@ -1,7 +1,11 @@
 import axios from 'axios';
 import {useState} from "react";
+import {useNavigate} from "react-router-dom";
 
 const Register = () => {
+    const navigate = useNavigate();
+
+
     const [formData, setFormData] = useState({
         username: '',
         email: '',
@@ -14,6 +18,7 @@ const Register = () => {
         // const response = await axios.post('/backend', formData);
         // console.log(response.data);
         console.log(formData);
+        navigate('/login');
     }
 
     const handleChange = (e) => {
