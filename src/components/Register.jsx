@@ -1,8 +1,25 @@
+import axios from 'axios';
+import {useState} from "react";
+
 const Register = () => {
+    const [formData, setFormData] = useState({
+        username: '',
+        email: '',
+        password: '',
+        role: 'student',
+    });
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        const response = await axios.post('/backend', formData);
+        console.log(response.data);
+    }
+
+
     return (
         <div>
             <h2>Register</h2>
-            <form action="">
+            <form action="" onSubmit={handleSubmit}>
                 <label htmlFor="username"></label>
                 <input type="text" id="username" name="username" placeholder="username"/>
                 <label htmlFor="email"></label>
