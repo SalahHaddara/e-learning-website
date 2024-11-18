@@ -2,7 +2,7 @@
 $server = "localhost";
 $user = "root";
 $password = "";
-$database = "e-learning-website";
+$database = "e_learning_platform";
 
 $conn = new mysqli($server, $user, $password, $database);
 
