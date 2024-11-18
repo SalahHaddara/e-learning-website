@@ -1,11 +1,10 @@
 <?php
-
 require "connection.php";
 
-$username = $_POST['username'];
-$email = $_POST['email'];
-$password = $_POST['password'];
-$role = $_POST['role'];
+$username = $_POST['username'] ?? null;
+$email = $_POST['email'] ?? null;
+$password = $_POST['password'] ?? null;
+$role = $_POST['role'] ?? null;
 
 if (empty($username) || empty($email) || empty($password) || empty($role)) {
     echo json_encode(["status" => "error", "message" => "All fields are required."]);

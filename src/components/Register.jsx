@@ -15,10 +15,20 @@ const Register = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        // const response = await axios.post('/backend', formData);
-        // console.log(response.data);
-        console.log(formData);
-        navigate('/login');
+        try {
+            const response = await axios.post('http://localhost/e-learning-website/backend/register.php',
+                formData,
+                {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                    },
+                });
+            console.log(response);
+            navigate('/login');
+        } catch (error) {
+            console.error('Registration error', error);
+        }
+
     }
 
     const handleChange = (e) => {
@@ -34,7 +44,6 @@ const Register = () => {
             setFormData({...formData, role: value});
         }
     };
-
 
     return (
         <div>
