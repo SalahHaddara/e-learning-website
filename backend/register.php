@@ -11,7 +11,7 @@ if (empty($username) || empty($email) || empty($password) || empty($role)) {
     exit;
 }
 
-$sql = "SELECT * FROM users WHERE email = ?";
+$sql = "SELECT * FROM user WHERE email = ?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("s", $email);
 $stmt->execute();
@@ -24,7 +24,7 @@ if ($result->num_rows > 0) {
 
 $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
 
-$sql = "INSERT INTO users (username, email, password, role) VALUES (?, ?, ?, ?)";
+$sql = "INSERT INTO user (username, email, password, role) VALUES (?, ?, ?, ?)";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("ssss", $username, $email, $hashedPassword, $role);
 
