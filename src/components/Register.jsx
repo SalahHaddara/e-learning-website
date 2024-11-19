@@ -17,11 +17,11 @@ const Register = () => {
         e.preventDefault();
         try {
             const response = await axios.post('http://localhost/e-learning-website/backend/register.php',
-                formData,
+                JSON.stringify(formData),
                 {
                     headers: {
-                        'Content-Type': 'multipart/form-data',
-                    },
+                        'Content-Type': 'application/json'
+                    }
                 });
             console.log(response);
             navigate('/login');

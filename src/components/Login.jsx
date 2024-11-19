@@ -12,12 +12,17 @@ const Login = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        // const response = await axios.post('/backend/login', formData);
-        // console.log(response.data);
+        const response = await axios.post('http://localhost/e-learning-website/backend/login.php',
+            JSON.stringify(formData),
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+        console.log(response.data);
         console.log(formData);
         navigate('/dashboard');
     }
-
     const handleChange = (e) => {
         const {name, value} = e.target;
 
