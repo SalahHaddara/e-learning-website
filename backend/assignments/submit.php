@@ -48,6 +48,27 @@ try {
         }
     }
 
+    $submission_text = $_POST['submission_text'] ?? null;
+    $assignment_id = $_POST['assignment_id'] ?? null;
+
+    if (!$assignment_id) {
+        throw new Exception('Assignment ID is required');
+    }
+
+    $stmt = $conn->prepare(
+        "INSERT INTO assignment_submissions (attachment_url, submission_text, assignments_id, user_id)
+        VALUES (?, ?, ?, ?)"
+    );
+    $stmt->bind_param("ssii", $attachment_url, $submission_text, $assignment_id, $payload->user_id);
+
+    if ($stmt->execute()) {
+        echo json_encode([
+            'status' => 'success',
+            'message' => 'Assignment submitted successfully'
+        ]);
+    } else {
+        throw new Exception('Failed to submit assignment');
+    }
 
 } catch (Exception $e) {
     http_response_code(400);
