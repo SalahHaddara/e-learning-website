@@ -37,13 +37,21 @@ const Login = () => {
             localStorage.setItem('token', response.token);
             localStorage.setItem('user', JSON.stringify(response.user));
 
-            if (response.user.role === 'admin') {
-                navigate('/dashboard');
-            } else {
-                alert('Only admins can access the dashboard');
+            switch (response.user.role) {
+                case 'admin':
+                    navigate('/dashboard');
+                    break;
+                case 'instructor':
+                    navigate('/instructor');
+                    break;
+                case 'student':
+                    navigate('/student');
+                    break;
+                default:
+                    console.error('Invalid user role');
             }
         } catch (error) {
-            alert(error.response?.data?.message || 'Login failed');
+            console.error(error.message || 'Login failed');
         }
     };
 
@@ -63,10 +71,10 @@ const Login = () => {
             <form action="" onSubmit={handleSubmit}>
                 <label htmlFor="email"></label>
                 <input type="email" id="email" name="email" placeholder="email" value={formData.email}
-                       onChange={handleChange}/>
+                       onChange={handleChange} required/>
                 <label htmlFor="password"></label>
                 <input type="password" id="password" name="password" placeholder="password" value={formData.password}
-                       onChange={handleChange}/>
+                       onChange={handleChange} required/>
 
                 <button type="submit">Login</button>
             </form>
