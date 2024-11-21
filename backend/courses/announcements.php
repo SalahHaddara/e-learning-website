@@ -48,6 +48,54 @@ try {
         exit;
     }
 
+    $enrollment_check = $conn->prepare(
+        "SELECT 1 FROM course_enrollments 
+        WHERE user_id = ? AND courses_id = ? AND status = 'active'"
+    );
+    $enrollment_check->bind_param("ii", $payload->user_id, $course_id);
+    $enrollment_check->execute();
+
+    if ($enrollment_check->get_result()->num_rows === 0) {
+        http_response_code(400);
+        echo json_encode([
+            'status' => 'error',
+            'message' => 'You are not enrolled in this course'
+        ]);
+        exit;
+    }
+
+    $query = "SELECT 
+                a.id,
+                a.title,
+                a.content,
+                a.create_time,
+                u.username as instructor_name
+            FROM announcements a
+            JOIN user u ON a.user_id = u.id
+            WHERE a.courses_id = ?
+            ORDER BY a.create_time DESC";
+
+    $stmt = $conn->prepare($query);
+    $stmt->bind_param("i", $course_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    $announcements = [];
+    while ($row = $result->fetch_assoc()) {
+        $announcements[] = [
+            'id' => $row['id'],
+            'title' => $row['title'],
+            'content' => $row['content'],
+            'created_at' => $row['create_time'],
+            'instructor_name' => $row['instructor_name']
+        ];
+    }
+
+    echo json_encode([
+        'status' => 'success',
+        'announcements' => $announcements
+    ]);
+
 } catch (Exception $e) {
     http_response_code(500);
     echo json_encode([
