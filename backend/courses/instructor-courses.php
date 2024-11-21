@@ -5,6 +5,8 @@ require "./../../vendor/autoload.php";
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 
+header('Content-Type: application/json'); // Add this line
+
 if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
     http_response_code(400);
     echo json_encode([
@@ -47,12 +49,12 @@ try {
             c.description,
             c.status,
             c.create_time,
-            COUNT(DISTINCT e.student_id) as student_count
+            COUNT(DISTINCT ce.id) as student_count
         FROM courses c
         LEFT JOIN course_instructos ci ON c.id = ci.courses_id
-        LEFT JOIN enrollments e ON c.id = e.course_id
+        LEFT JOIN course_enrollments ce ON c.id = ce.courses_id
         WHERE ci.user_id = ?
-        GROUP BY c.id
+        GROUP BY c.id, c.title, c.description, c.status, c.create_time
     ";
 
     $stmt = $conn->prepare($query);
@@ -74,7 +76,9 @@ try {
     http_response_code(400);
     echo json_encode([
         'status' => 'error',
-        'message' => 'Invalid token'
+        'message' => 'Invalid token or database error: ' . $e->getMessage()
     ]);
 }
+
+$conn->close();
 ?>
