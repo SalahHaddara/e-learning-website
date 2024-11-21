@@ -57,6 +57,12 @@ const InstructorPage = () => {
                 />
             )}
 
+            {showInviteModal && (
+                <InviteStudentModal
+                    onClose={() => setShowInviteModal(false)}
+                    onSubmit={handleInviteStudent}
+                />
+            )}
         </div>
     );
 };
