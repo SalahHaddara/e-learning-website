@@ -3,6 +3,7 @@ import {useState, useEffect} from 'react';
 import './Dashboard.css';
 import {requestMethods} from "../services/request/enums/requestMethods.js";
 import {requestApi} from "../services/request/requestApi.js";
+import UserCard from "./dashboard/components/UserCard.jsx";
 import CreateCourseModal from "./dashboard/components/CreateCourseModal.jsx";
 
 const Dashboard = () => {
@@ -41,6 +42,18 @@ const Dashboard = () => {
         }
     };
 
+    const handleBanUser = async (userId) => {
+        try {
+            await requestApi({
+                route: '/users/ban',
+                method: requestMethods.POST,
+                body: {user_id: userId}
+            });
+            await fetchUsers();
+        } catch (error) {
+            console.error('Error banning user:', error);
+        }
+    };
 
     const handleCreateCourse = async (courseData) => {
         try {
@@ -58,6 +71,14 @@ const Dashboard = () => {
 
     return (
         <div className="dashboard">
+            <section className="section">
+                <h2>Users</h2>
+                <div className="grid">
+                    {users.map(user => (
+                        <UserCard key={user.id} user={user} onBan={handleBanUser}/>
+                    ))}
+                </div>
+            </section>
 
 
             {showCreateCourse && (
