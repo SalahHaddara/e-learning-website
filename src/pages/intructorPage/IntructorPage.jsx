@@ -64,6 +64,22 @@ const InstructorPage = () => {
         }
     };
 
+    const handleInviteStudent = async (email) => {
+        try {
+            await requestApi({
+                route: '/courses/invite-student',
+                method: requestMethods.POST,
+                body: {
+                    course_id: selectedCourse.id,
+                    student_email: email
+                }
+            });
+            setShowInviteModal(false);
+            fetchCourses(); // Refresh to update student count
+        } catch (error) {
+            console.error('Error inviting student:', error);
+        }
+    };
 
     return (
         <div className="instructor-page">
