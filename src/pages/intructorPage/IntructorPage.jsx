@@ -47,6 +47,23 @@ const InstructorPage = () => {
         }
     };
 
+    const handleCreateAssignment = async (data) => {
+        try {
+            await requestApi({
+                route: '/courses/create-assignment',
+                method: requestMethods.POST,
+                body: {
+                    course_id: selectedCourse.id,
+                    ...data
+                }
+            });
+            setShowAssignmentModal(false);
+            // Optionally refresh course data
+        } catch (error) {
+            console.error('Error creating assignment:', error);
+        }
+    };
+
 
     return (
         <div className="instructor-page">
