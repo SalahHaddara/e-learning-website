@@ -1,11 +1,8 @@
-import {useState, useEffect} from 'react';
-import {requestApi} from '../../services/request';
-import {requestMethods} from '../../services/requestMethods';
-import AnnouncementModal from './components/AnnouncementModal';
-import AssignmentModal from './components/AssignmentModal';
-import InviteStudentModal from './components/InviteStudentModal';
-import CourseCard from './components/CourseCard';
+import {useEffect, useState} from 'react';
 import './InstructorPage.css';
+import {requestApi} from "../../services/request/requestApi.js";
+import {requestMethods} from "../../services/request/enums/requestMethods.js";
+import CourseCard from "../dashboard/components/CourseCard.jsx";
 
 const InstructorPage = () => {
     const [courses, setCourses] = useState([]);
