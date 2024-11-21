@@ -18,6 +18,19 @@ const InstructorPage = () => {
         fetchCourses();
     }, []);
 
+    const fetchCourses = async () => {
+        try {
+            const response = await requestApi({
+                route: '/courses/instructor-courses',
+                method: requestMethods.GET
+            });
+            setCourses(response.courses);
+        } catch (error) {
+            console.error('Error fetching courses:', error);
+        }
+    };
+
+
     return (
         <div className="instructor-page">
             <h1>My Courses</h1>
