@@ -43,6 +43,13 @@ const InstructorPage = () => {
                 ))}
             </div>
 
+            {showAnnouncementModal && (
+                <AnnouncementModal
+                    onClose={() => setShowAnnouncementModal(false)}
+                    onSubmit={handleCreateAnnouncement}
+                />
+            )}
+
         </div>
     );
 };
