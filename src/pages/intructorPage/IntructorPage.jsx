@@ -30,6 +30,23 @@ const InstructorPage = () => {
         }
     };
 
+    const handleCreateAnnouncement = async (data) => {
+        try {
+            await requestApi({
+                route: '/courses/create-announcement',
+                method: requestMethods.POST,
+                body: {
+                    course_id: selectedCourse.id,
+                    ...data
+                }
+            });
+            setShowAnnouncementModal(false);
+            // Optionally refresh course data
+        } catch (error) {
+            console.error('Error creating announcement:', error);
+        }
+    };
+
 
     return (
         <div className="instructor-page">
