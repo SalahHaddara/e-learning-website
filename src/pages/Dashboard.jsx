@@ -1,5 +1,4 @@
 import {useState, useEffect} from 'react';
-
 import './dashboard/Dashboard.css';
 import {requestMethods} from "../services/request/enums/requestMethods.js";
 import {requestApi} from "../services/request/requestApi.js";
@@ -90,6 +89,7 @@ const Dashboard = () => {
                 body: {course_id: courseId, instructor_id: instructorId}
             });
             await fetchCourses();
+            
         } catch (error) {
             console.error('Error assigning instructor:', error);
         }

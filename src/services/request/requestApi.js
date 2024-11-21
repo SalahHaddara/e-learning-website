@@ -11,7 +11,7 @@ export const requestApi = async ({route, method = "GET", body}) => {
             headers: {
                 "Content-Type": "application/json",
                 Authorization: localStorage.token
-            },
+            }
         });
 
         if (response.data.status === 'error') {
