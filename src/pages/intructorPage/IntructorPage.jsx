@@ -23,7 +23,24 @@ const InstructorPage = () => {
             <h1>My Courses</h1>
 
             <div className="courses-grid">
-
+                {courses.map(course => (
+                    <CourseCard
+                        key={course.id}
+                        course={course}
+                        onCreateAnnouncement={() => {
+                            setSelectedCourse(course);
+                            setShowAnnouncementModal(true);
+                        }}
+                        onCreateAssignment={() => {
+                            setSelectedCourse(course);
+                            setShowAssignmentModal(true);
+                        }}
+                        onInviteStudent={() => {
+                            setSelectedCourse(course);
+                            setShowInviteModal(true);
+                        }}
+                    />
+                ))}
             </div>
 
         </div>
