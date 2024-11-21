@@ -1,3 +1,5 @@
+import PropTypes from 'prop-types';
+
 const InstructorCourseCard = ({course, onCreateAnnouncement, onCreateAssignment, onInviteStudent}) => {
     return (
         <div className="card">
@@ -29,4 +31,18 @@ const InstructorCourseCard = ({course, onCreateAnnouncement, onCreateAssignment,
         </div>
     );
 };
+
+InstructorCourseCard.propTypes = {
+    course: PropTypes.shape({
+        id: PropTypes.number.isRequired,
+        title: PropTypes.string.isRequired,
+        description: PropTypes.string,
+        create_time: PropTypes.string,
+        student_count: PropTypes.number
+    }).isRequired,
+    onCreateAnnouncement: PropTypes.func.isRequired,
+    onCreateAssignment: PropTypes.func.isRequired,
+    onInviteStudent: PropTypes.func.isRequired
+};
+
 export default InstructorCourseCard;
