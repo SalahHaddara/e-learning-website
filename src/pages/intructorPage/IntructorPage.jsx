@@ -50,6 +50,13 @@ const InstructorPage = () => {
                 />
             )}
 
+            {showAssignmentModal && (
+                <AssignmentModal
+                    onClose={() => setShowAssignmentModal(false)}
+                    onSubmit={handleCreateAssignment}
+                />
+            )}
+
         </div>
     );
 };
