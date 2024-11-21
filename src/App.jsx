@@ -1,7 +1,9 @@
 import './App.css'
-import Register from "./components/Register.jsx";
-import Login from "./components/Login.jsx";
+import Register from "./pages/Register.jsx";
+import Login from "./pages/Login.jsx";
 import {BrowserRouter, Routes, Route, Navigate} from "react-router-dom";
+import ProtectedRoute from "./components/ProtectedRoute.jsx";
+import Dashboard from "./pages/Dashboard.jsx";
 
 function App() {
 
@@ -9,10 +11,14 @@ function App() {
         <>
             <BrowserRouter>
                 <Routes>
-                    <Route path="/" element={<Navigate to="/register"/>}/>
+                    <Route path="/" element={<Navigate to="/login"/>}/>
                     <Route path="/register" element={<Register/>}/>
                     <Route path="/login" element={<Login/>}/>
-                </Routes>
+                    <Route path="/dashboard" element={
+                        <ProtectedRoute>
+                            <Dashboard/>
+                        </ProtectedRoute>
+                    }/> </Routes>
             </BrowserRouter>
         </>
     )
