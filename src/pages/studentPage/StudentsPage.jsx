@@ -6,3 +6,5 @@ const StudentPage = () => {
         </div>
     );
 };
+
+export default StudentPage;
