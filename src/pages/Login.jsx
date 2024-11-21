@@ -1,6 +1,8 @@
 import axios from 'axios';
 import {useState} from "react";
 import {useNavigate} from "react-router-dom";
+import {requestApi} from "../services/request/requestApi.js";
+import {requestApi, requestMethods} from "../services/request/enums/requestMethods.js";
 
 const Login = () => {
     const navigate = useNavigate();
@@ -10,19 +12,42 @@ const Login = () => {
         password: '',
     });
 
+    // const handleSubmit = async (e) => {
+    //     e.preventDefault();
+    //     const response = await axios.post('http://localhost/e-learning-website/backend/login.php',
+    //         JSON.stringify(formData),
+    //         {
+    //             headers: {
+    //                 'Content-Type': 'application/json',
+    //             },
+    //         });
+    //     console.log(response.data);
+    //     console.log(formData);
+    //     navigate('/dashboard');
+    // }
+
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const response = await axios.post('http://localhost/e-learning-website/backend/login.php',
-            JSON.stringify(formData),
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                },
+        try {
+            const response = await requestApi({
+                route: '/login',
+                method: requestMethods.POST,
+                body: formData
             });
-        console.log(response.data);
-        console.log(formData);
-        navigate('/dashboard');
-    }
+
+            localStorage.setItem('token', response.token);
+            localStorage.setItem('user', JSON.stringify(response.user));
+
+            if (response.user.role === 'admin') {
+                navigate('/dashboard');
+            } else {
+                alert('Only admins can access the dashboard');
+            }
+        } catch (error) {
+            alert(error.response?.data?.message || 'Login failed');
+        }
+    };
+
     const handleChange = (e) => {
         const {name, value} = e.target;
 
