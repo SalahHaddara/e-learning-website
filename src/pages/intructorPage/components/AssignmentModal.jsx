@@ -1,4 +1,4 @@
-import InviteStudentModal from "./InviteStudentModal.jsx";
+import {useState} from 'react';
 
 const AssignmentModal = ({onClose, onSubmit}) => {
     const [formData, setFormData] = useState({
@@ -67,4 +67,4 @@ const AssignmentModal = ({onClose, onSubmit}) => {
         </>
     );
 };
-export default InviteStudentModal;
+export default AssignmentModal;
