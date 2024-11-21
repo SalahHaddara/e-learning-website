@@ -3,9 +3,14 @@ import './InstructorPage.css';
 import {requestApi} from "../../services/request/requestApi.js";
 import {requestMethods} from "../../services/request/enums/requestMethods.js";
 import CourseCard from "../dashboard/components/CourseCard.jsx";
+import AnnouncementModal from "./components/AnnouncementModal.jsx";
+import AssignmentModal from "./components/AssignmentModal.jsx";
+import InviteStudentModal from "./components/InviteStudentModal.jsx";
 
 const InstructorPage = () => {
     const [courses, setCourses] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
     const [selectedCourse, setSelectedCourse] = useState(null);
     const [showAnnouncementModal, setShowAnnouncementModal] = useState(false);
     const [showAssignmentModal, setShowAssignmentModal] = useState(false);
@@ -17,13 +22,24 @@ const InstructorPage = () => {
 
     const fetchCourses = async () => {
         try {
+            setLoading(true);
+            setError(null);
             const response = await requestApi({
                 route: '/courses/instructor-courses',
                 method: requestMethods.GET
             });
-            setCourses(response.courses);
+
+            if (response && response.courses) {
+                setCourses(response.courses);
+            } else {
+                setCourses([]);
+            }
         } catch (error) {
             console.error('Error fetching courses:', error);
+            setError('Failed to load courses. Please try again later.');
+            setCourses([]);
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -38,9 +54,10 @@ const InstructorPage = () => {
                 }
             });
             setShowAnnouncementModal(false);
-            // Optionally refresh course data
+            fetchCourses();
         } catch (error) {
             console.error('Error creating announcement:', error);
+            alert('Failed to create announcement. Please try again.');
         }
     };
 
@@ -55,9 +72,10 @@ const InstructorPage = () => {
                 }
             });
             setShowAssignmentModal(false);
-            // Optionally refresh course data
+            fetchCourses();
         } catch (error) {
             console.error('Error creating assignment:', error);
+            alert('Failed to create assignment. Please try again.');
         }
     };
 
@@ -68,40 +86,55 @@ const InstructorPage = () => {
                 method: requestMethods.POST,
                 body: {
                     course_id: selectedCourse.id,
-                    student_email: email
+                    email: email
                 }
             });
             setShowInviteModal(false);
-            fetchCourses(); // Refresh to update student count
+            fetchCourses();
         } catch (error) {
             console.error('Error inviting student:', error);
+            alert('Failed to invite student. Please try again.');
         }
     };
+
+    if (loading) {
+        return <div className="loading">Loading courses...</div>;
+    }
+
+    if (error) {
+        return <div className="error">{error}</div>;
+    }
 
     return (
         <div className="instructor-page">
             <h1>My Courses</h1>
 
-            <div className="courses-grid">
-                {courses.map(course => (
-                    <CourseCard
-                        key={course.id}
-                        course={course}
-                        onCreateAnnouncement={() => {
-                            setSelectedCourse(course);
-                            setShowAnnouncementModal(true);
-                        }}
-                        onCreateAssignment={() => {
-                            setSelectedCourse(course);
-                            setShowAssignmentModal(true);
-                        }}
-                        onInviteStudent={() => {
-                            setSelectedCourse(course);
-                            setShowInviteModal(true);
-                        }}
-                    />
-                ))}
-            </div>
+            {courses.length === 0 ? (
+                <div className="no-courses">
+                    No courses found. Contact an administrator to be assigned to courses.
+                </div>
+            ) : (
+                <div className="courses-grid">
+                    {courses.map(course => (
+                        <CourseCard
+                            key={course.id}
+                            course={course}
+                            onCreateAnnouncement={() => {
+                                setSelectedCourse(course);
+                                setShowAnnouncementModal(true);
+                            }}
+                            onCreateAssignment={() => {
+                                setSelectedCourse(course);
+                                setShowAssignmentModal(true);
+                            }}
+                            onInviteStudent={() => {
+                                setSelectedCourse(course);
+                                setShowInviteModal(true);
+                            }}
+                        />
+                    ))}
+                </div>
+            )}
 
             {showAnnouncementModal && (
                 <AnnouncementModal
