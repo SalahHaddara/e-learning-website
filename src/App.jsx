@@ -1,7 +1,7 @@
 import './App.css'
 import Register from "./pages/Register.jsx";
 import Login from "./pages/Login.jsx";
-import {BrowserRouter, Routes, Route, Navigate} from "react-router-dom";
+import {BrowserRouter, Navigate, Route, Routes} from "react-router-dom";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import Dashboard from "./pages/Dashboard.jsx";
 import InstructorPage from "./pages/intructorPage/IntructorPage.jsx";
@@ -26,7 +26,7 @@ function App() {
                             <InstructorPage/>
                         </ProtectedRoute>
                     }/>
-                    <Route path="/student " element={
+                    <Route path="/student" element={
                         <ProtectedRoute allowedRole="student">
                             <StudentPage/>
                         </ProtectedRoute>

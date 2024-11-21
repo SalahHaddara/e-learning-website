@@ -2,10 +2,10 @@ import {useEffect, useState} from 'react';
 import './InstructorPage.css';
 import {requestApi} from "../../services/request/requestApi.js";
 import {requestMethods} from "../../services/request/enums/requestMethods.js";
-import CourseCard from "../dashboard/components/CourseCard.jsx";
 import AnnouncementModal from "./components/AnnouncementModal.jsx";
 import AssignmentModal from "./components/AssignmentModal.jsx";
 import InviteStudentModal from "./components/InviteStudentModal.jsx";
+import InstructorCourseCard from "./components/CourseCard.jsx";
 
 const InstructorPage = () => {
     const [courses, setCourses] = useState([]);
@@ -46,15 +46,15 @@ const InstructorPage = () => {
     const handleCreateAnnouncement = async (data) => {
         try {
             await requestApi({
-                route: '/courses/create-announcement',
+                route: '/announcements/create',
                 method: requestMethods.POST,
                 body: {
-                    course_id: selectedCourse.id,
+                    course_id: selectedCourse,
                     ...data
                 }
             });
             setShowAnnouncementModal(false);
-            fetchCourses();
+            await fetchCourses();
         } catch (error) {
             console.error('Error creating announcement:', error);
             alert('Failed to create announcement. Please try again.');
@@ -64,15 +64,15 @@ const InstructorPage = () => {
     const handleCreateAssignment = async (data) => {
         try {
             await requestApi({
-                route: '/courses/create-assignment',
+                route: '/assignments/create',
                 method: requestMethods.POST,
                 body: {
-                    course_id: selectedCourse.id,
+                    course_id: selectedCourse,
                     ...data
                 }
             });
             setShowAssignmentModal(false);
-            fetchCourses();
+            await fetchCourses();
         } catch (error) {
             console.error('Error creating assignment:', error);
             alert('Failed to create assignment. Please try again.');
@@ -82,15 +82,15 @@ const InstructorPage = () => {
     const handleInviteStudent = async (email) => {
         try {
             await requestApi({
-                route: '/courses/invite-student',
+                route: '/courses/invite',
                 method: requestMethods.POST,
                 body: {
-                    course_id: selectedCourse.id,
+                    course_id: selectedCourse,
                     email: email
                 }
             });
             setShowInviteModal(false);
-            fetchCourses();
+            await fetchCourses();
         } catch (error) {
             console.error('Error inviting student:', error);
             alert('Failed to invite student. Please try again.');
@@ -116,19 +116,19 @@ const InstructorPage = () => {
             ) : (
                 <div className="courses-grid">
                     {courses.map(course => (
-                        <CourseCard
+                        <InstructorCourseCard
                             key={course.id}
                             course={course}
                             onCreateAnnouncement={() => {
-                                setSelectedCourse(course);
+                                setSelectedCourse(course.id);
                                 setShowAnnouncementModal(true);
                             }}
                             onCreateAssignment={() => {
-                                setSelectedCourse(course);
+                                setSelectedCourse(course.id);
                                 setShowAssignmentModal(true);
                             }}
                             onInviteStudent={() => {
-                                setSelectedCourse(course);
+                                setSelectedCourse(course.id);
                                 setShowInviteModal(true);
                             }}
                         />
