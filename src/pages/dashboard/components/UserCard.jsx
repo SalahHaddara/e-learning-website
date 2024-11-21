@@ -1,4 +1,4 @@
-import './Dashboard.css';
+import './../Dashboard.css';
 
 const UserCard = ({user, onBan}) => {
     return (

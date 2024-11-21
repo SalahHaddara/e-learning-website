@@ -1,8 +1,7 @@
-import axios from 'axios';
 import {useState} from "react";
 import {useNavigate} from "react-router-dom";
 import {requestApi} from "../services/request/requestApi.js";
-import {requestApi, requestMethods} from "../services/request/enums/requestMethods.js";
+import {requestMethods} from "../services/request/enums/requestMethods.js";
 
 const Login = () => {
     const navigate = useNavigate();

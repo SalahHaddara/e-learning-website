@@ -1,9 +1,10 @@
 import {useState, useEffect} from 'react';
 
-import './Dashboard.css';
+import './dashboard/Dashboard.css';
 import {requestMethods} from "../services/request/enums/requestMethods.js";
 import {requestApi} from "../services/request/requestApi.js";
 import UserCard from "./dashboard/components/UserCard.jsx";
+import CourseCard from "./dashboard/components/CourseCard.jsx";
 import CreateCourseModal from "./dashboard/components/CreateCourseModal.jsx";
 
 const Dashboard = () => {
@@ -68,6 +69,31 @@ const Dashboard = () => {
         }
     };
 
+    const handleDeleteCourse = async (courseId) => {
+        try {
+            await requestApi({
+                route: '/courses/delete',
+                method: requestMethods.DELETE,
+                body: {course_id: courseId}
+            });
+            await fetchCourses();
+        } catch (error) {
+            console.error('Error deleting course:', error);
+        }
+    };
+
+    const handleAssignInstructor = async (courseId, instructorId) => {
+        try {
+            await requestApi({
+                route: '/courses/teaching',
+                method: requestMethods.POST,
+                body: {course_id: courseId, instructor_id: instructorId}
+            });
+            await fetchCourses();
+        } catch (error) {
+            console.error('Error assigning instructor:', error);
+        }
+    };
 
     return (
         <div className="dashboard">
@@ -80,6 +106,23 @@ const Dashboard = () => {
                 </div>
             </section>
 
+            <section className="section">
+                <h2>Courses</h2>
+                <button className="button" onClick={() => setShowCreateCourse(true)}>
+                    Create New Course
+                </button>
+                <div className="grid">
+                    {courses.map(course => (
+                        <CourseCard
+                            key={course.id}
+                            course={course}
+                            instructors={instructors}
+                            onAssignInstructor={handleAssignInstructor}
+                            onDelete={handleDeleteCourse}
+                        />
+                    ))}
+                </div>
+            </section>
 
             {showCreateCourse && (
                 <CreateCourseModal
